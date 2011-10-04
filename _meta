@@ -1,0 +1,12 @@
+<package project="Mer:Trunk:Base" name="readline">
+  <title>A library for editing typed command lines</title>
+  <description>The Readline library provides a set of functions that allow users to
+edit command lines. Both Emacs and vi editing modes are available. The
+Readline library includes additional functions for maintaining a list
+of previously-entered command lines for recalling or editing those
+lines, and for performing csh-like history expansion on previous
+commands.
+
+</description>
+  <url>http://cnswww.cns.cwru.edu/php/chet/readline/rltop.html</url>
+</package>

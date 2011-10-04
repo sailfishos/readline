@@ -1,0 +1,9 @@
+* Tue May 24 2011 Anas Nashif <anas.nashif@intel.com> - 5.2
+- Repackage documentations
+
+* Sun Nov 30 2008 Peter J Zhu <peter.j.zhu@intel.com> - 5.2-13
+- Remove info install warning
+
+* Wed Jul 23 2008 Zhang Xin <xing.z.zhang@intel.com>
+- Mark man file and info file as %doc
+
