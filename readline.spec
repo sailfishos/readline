@@ -84,36 +84,24 @@ rm -rf $RPM_BUILD_ROOT
 
 make DESTDIR=$RPM_BUILD_ROOT install
 
-mkdir $RPM_BUILD_ROOT/%{_lib}
-mv $RPM_BUILD_ROOT%{_libdir}/libreadline.so.* $RPM_BUILD_ROOT/%{_lib}
-for l in $RPM_BUILD_ROOT%{_libdir}/libreadline.so; do
-    ln -sf $(echo %{_libdir} | \
-        sed 's,\(^/\|\)[^/][^/]*,..,g')/%{_lib}/$(readlink $l) $l
-done
-
 rm -f $RPM_BUILD_ROOT%{_infodir}/dir
-
-%clean
-rm -rf $RPM_BUILD_ROOT
 
 %post -p /sbin/ldconfig
 
 %postun -p /sbin/ldconfig
 
-
 %docs_package
-
 
 %files
 %defattr(-,root,root,-)
 %doc COPYING 
-/%{_lib}/libreadline*.so.*
+%{_libdir}/libreadline*.so.*
 %{_libdir}/libhistory*.so.*
 
 %files devel
 %defattr(-,root,root,-)
 %doc examples/*.c examples/*.h examples/rlfe
-%{_includedir}/readline
+%{_includedir}/readline/*.h
 %{_libdir}/lib*.so
 
 %files static
