@@ -20,6 +20,8 @@ Patch10: readline-5.2-009.patch
 Patch11: readline-5.2-010.patch
 Patch12: readline-5.2-011.patch
 Patch13: readline-5.2-redisplay-sigint.patch
+Patch14: readline-aarch64.patch
+
 BuildRequires: ncurses-devel
 
 %description
@@ -66,6 +68,7 @@ library.
 %patch11 -p0 -b .010
 %patch12 -p0 -b .011
 %patch13 -p1 -b .redisplay-sigint
+%patch14 -p1
 
 pushd examples
 rm -f rlfe/configure
