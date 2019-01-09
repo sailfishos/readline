@@ -1,3 +1,6 @@
+* Wed Jan 09 2019 Tomi Leppänen <tomi.leppanen@jolla.com> - 5.2-14
+- [packaging] Rename readline-docs to readline-doc. Contributes to JB#38578
+
 * Sat Oct 06 2012 Marko Saukko <marko.saukko@jollamobile.com> - 5.2
 - Moving libs to /usr/lib/. Contributing to MER#174.
 

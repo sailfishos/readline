@@ -2,7 +2,7 @@
 Summary: A library for editing typed command lines
 Name: readline
 Version: 5.2
-Release: 13
+Release: 14
 License: GPLv2+
 Group: System/Libraries
 URL: http://cnswww.cns.cwru.edu/php/chet/readline/rltop.html
@@ -53,6 +53,15 @@ Requires: %{name}-devel = %{version}-%{release}
 The readline-static package contains the static version of the readline
 library.
 
+%package doc
+Summary:   Documentation for %{name}
+Group:     Documentation
+Requires:  %{name} = %{version}-%{release}
+Obsoletes: %{name}-docs
+
+%description doc
+Examples, man and info pages for %{name}.
+
 %prep
 %setup -q
 %patch1 -p1 -b .shlib
@@ -89,21 +98,23 @@ make DESTDIR=$RPM_BUILD_ROOT install
 
 rm -f $RPM_BUILD_ROOT%{_infodir}/dir
 
+mkdir -p $RPM_BUILD_ROOT%{_docdir}/%{name}-%{version}
+install -m0644 -t $RPM_BUILD_ROOT%{_docdir}/%{name}-%{version} \
+        CHANGELOG CHANGES NEWS examples/*.c examples/*.h examples/rlfe/*.c \
+        examples/rlfe/*.h examples/rlfe/README examples/rlfe/ChangeLog
+
 %post -p /sbin/ldconfig
 
 %postun -p /sbin/ldconfig
 
-%docs_package
-
 %files
 %defattr(-,root,root,-)
-%doc COPYING 
+%license COPYING
 %{_libdir}/libreadline*.so.*
 %{_libdir}/libhistory*.so.*
 
 %files devel
 %defattr(-,root,root,-)
-%doc examples/*.c examples/*.h examples/rlfe
 %{_includedir}/readline/*.h
 %{_libdir}/lib*.so
 
@@ -111,3 +122,9 @@ rm -f $RPM_BUILD_ROOT%{_infodir}/dir
 %defattr(-,root,root,-)
 %{_libdir}/lib*.a
 
+%files doc
+%defattr(-,root,root,-)
+%{_infodir}/*.*
+%{_mandir}/man3/%{name}.*
+%{_mandir}/man3/history.*
+%{_docdir}/%{name}-%{version}
