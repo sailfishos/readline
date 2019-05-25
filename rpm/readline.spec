@@ -31,15 +31,6 @@ edit typed command lines. If you want to develop programs that will
 use the readline library, you need to have the readline-devel package
 installed. You also need to have the readline package installed.
 
-%package static
-Summary: Static libraries for the readline library
-Group: Development/Libraries
-Requires: %{name}-devel = %{version}-%{release}
-
-%description static
-The readline-static package contains the static version of the readline
-library.
-
 %package doc
 Summary:   Documentation for %{name}
 Group:     Documentation
@@ -62,18 +53,18 @@ popd
 
 %build
 export CPPFLAGS="-I%{_includedir}/ncurses"
-%configure
+%configure --enable-static=no
 make %{?_smp_mflags}
 
 %install
-rm -rf $RPM_BUILD_ROOT
+rm -rf %{buildroot}/
 
-make DESTDIR=$RPM_BUILD_ROOT install
+make DESTDIR=%{buildroot}/ install
 
-rm -f $RPM_BUILD_ROOT%{_infodir}/dir
+rm -f %{buildroot}/%{_infodir}/dir
 
-mkdir -p $RPM_BUILD_ROOT%{_docdir}/%{name}-%{version}
-install -m0644 -t $RPM_BUILD_ROOT%{_docdir}/%{name}-%{version} \
+mkdir -p %{buildroot}/%{_docdir}/%{name}-%{version}
+install -m0644 -t %{buildroot}/%{_docdir}/%{name}-%{version} \
         CHANGELOG CHANGES NEWS examples/*.c examples/*.h examples/rlfe/*.c \
         examples/rlfe/*.h examples/rlfe/README examples/rlfe/ChangeLog
 
@@ -91,12 +82,7 @@ install -m0644 -t $RPM_BUILD_ROOT%{_docdir}/%{name}-%{version} \
 %defattr(-,root,root,-)
 %{_includedir}/readline/*.h
 %{_libdir}/lib*.so
-%{_datadir}/%{name}/*.c
 %{_libdir}/pkgconfig/%{name}.pc
-
-%files static
-%defattr(-,root,root,-)
-%{_libdir}/lib*.a
 
 %files doc
 %defattr(-,root,root,-)
