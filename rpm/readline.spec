@@ -1,26 +1,13 @@
 #specfile originally created for Fedora, modified for Moblin Linux
 Summary: A library for editing typed command lines
 Name: readline
-Version: 5.2
-Release: 14
-License: GPLv2+
+Version: 8.0
+Release: 1
+License: GPLv3+
 Group: System/Libraries
-URL: http://cnswww.cns.cwru.edu/php/chet/readline/rltop.html
-Source: ftp://ftp.gnu.org/gnu/readline/readline-%{version}.tar.gz
+URL: https://tiswww.case.edu/php/chet/readline/rltop.html
+Source: %{name}-%{version}.tar.xz
 Patch1: readline-5.2-shlib.patch
-Patch2: readline-5.2-001.patch
-Patch3: readline-5.2-002.patch
-Patch4: readline-5.2-003.patch
-Patch5: readline-5.2-004.patch
-Patch6: readline-5.2-005.patch
-Patch7: readline-5.2-006.patch
-Patch8: readline-5.2-007.patch
-Patch9: readline-5.2-008.patch
-Patch10: readline-5.2-009.patch
-Patch11: readline-5.2-010.patch
-Patch12: readline-5.2-011.patch
-Patch13: readline-5.2-redisplay-sigint.patch
-Patch14: readline-aarch64.patch
 
 BuildRequires: ncurses-devel
 
@@ -44,15 +31,6 @@ edit typed command lines. If you want to develop programs that will
 use the readline library, you need to have the readline-devel package
 installed. You also need to have the readline package installed.
 
-%package static
-Summary: Static libraries for the readline library
-Group: Development/Libraries
-Requires: %{name}-devel = %{version}-%{release}
-
-%description static
-The readline-static package contains the static version of the readline
-library.
-
 %package doc
 Summary:   Documentation for %{name}
 Group:     Documentation
@@ -63,21 +41,8 @@ Obsoletes: %{name}-docs
 Examples, man and info pages for %{name}.
 
 %prep
-%setup -q
+%setup -q -n %{name}-%{version}/upstream
 %patch1 -p1 -b .shlib
-%patch2 -p0 -b .001
-%patch3 -p0 -b .002
-%patch4 -p0 -b .003
-%patch5 -p0 -b .004
-%patch6 -p0 -b .005
-%patch7 -p0 -b .006
-%patch8 -p0 -b .007
-%patch9 -p0 -b .008
-%patch10 -p0 -b .009
-%patch11 -p0 -b .010
-%patch12 -p0 -b .011
-%patch13 -p1 -b .redisplay-sigint
-%patch14 -p1
 
 pushd examples
 rm -f rlfe/configure
@@ -88,18 +53,18 @@ popd
 
 %build
 export CPPFLAGS="-I%{_includedir}/ncurses"
-%configure
+%configure --enable-static=no
 make %{?_smp_mflags}
 
 %install
-rm -rf $RPM_BUILD_ROOT
+rm -rf %{buildroot}/
 
-make DESTDIR=$RPM_BUILD_ROOT install
+make DESTDIR=%{buildroot}/ install
 
-rm -f $RPM_BUILD_ROOT%{_infodir}/dir
+rm -f %{buildroot}/%{_infodir}/dir
 
-mkdir -p $RPM_BUILD_ROOT%{_docdir}/%{name}-%{version}
-install -m0644 -t $RPM_BUILD_ROOT%{_docdir}/%{name}-%{version} \
+mkdir -p %{buildroot}/%{_docdir}/%{name}-%{version}
+install -m0644 -t %{buildroot}/%{_docdir}/%{name}-%{version} \
         CHANGELOG CHANGES NEWS examples/*.c examples/*.h examples/rlfe/*.c \
         examples/rlfe/*.h examples/rlfe/README examples/rlfe/ChangeLog
 
@@ -117,10 +82,7 @@ install -m0644 -t $RPM_BUILD_ROOT%{_docdir}/%{name}-%{version} \
 %defattr(-,root,root,-)
 %{_includedir}/readline/*.h
 %{_libdir}/lib*.so
-
-%files static
-%defattr(-,root,root,-)
-%{_libdir}/lib*.a
+%{_libdir}/pkgconfig/%{name}.pc
 
 %files doc
 %defattr(-,root,root,-)
@@ -128,3 +90,4 @@ install -m0644 -t $RPM_BUILD_ROOT%{_docdir}/%{name}-%{version} \
 %{_mandir}/man3/%{name}.*
 %{_mandir}/man3/history.*
 %{_docdir}/%{name}-%{version}
+%{_docdir}/%{name}
