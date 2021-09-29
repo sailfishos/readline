@@ -68,6 +68,9 @@ install -m0644 -t %{buildroot}/%{_docdir}/%{name}-%{version} \
         CHANGELOG CHANGES NEWS examples/*.c examples/*.h examples/rlfe/*.c \
         examples/rlfe/*.h examples/rlfe/README examples/rlfe/ChangeLog
 
+
+sed -e 's/termcap/tinfo/' -i %{buildroot}/%{_libdir}/pkgconfig/readline.pc
+
 %post -p /sbin/ldconfig
 
 %postun -p /sbin/ldconfig
