@@ -4,7 +4,6 @@ Name: readline
 Version: 8.0
 Release: 1
 License: GPLv3+
-Group: System/Libraries
 URL: https://tiswww.case.edu/php/chet/readline/rltop.html
 Source: %{name}-%{version}.tar.xz
 Patch1: readline-5.2-shlib.patch
@@ -21,7 +20,6 @@ commands.
 
 %package devel
 Summary: Files needed to develop programs which use the readline library
-Group: Development/Libraries
 Requires: %{name} = %{version}-%{release}
 Requires: ncurses-devel
 
@@ -33,7 +31,6 @@ installed. You also need to have the readline package installed.
 
 %package doc
 Summary:   Documentation for %{name}
-Group:     Documentation
 Requires:  %{name} = %{version}-%{release}
 Obsoletes: %{name}-docs
 
@@ -41,8 +38,7 @@ Obsoletes: %{name}-docs
 Examples, man and info pages for %{name}.
 
 %prep
-%setup -q -n %{name}-%{version}/upstream
-%patch1 -p1 -b .shlib
+%autosetup -p1 -n %{name}-%{version}/upstream
 
 pushd examples
 rm -f rlfe/configure
@@ -54,12 +50,10 @@ popd
 %build
 export CPPFLAGS="-I%{_includedir}/ncurses"
 %configure --enable-static=no
-make %{?_smp_mflags}
+%make_build
 
 %install
-rm -rf %{buildroot}/
-
-make DESTDIR=%{buildroot}/ install
+%make_install
 
 rm -f %{buildroot}/%{_infodir}/dir
 
