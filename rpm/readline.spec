@@ -1,7 +1,7 @@
 #specfile originally created for Fedora, modified for Moblin Linux
 Summary: A library for editing typed command lines
 Name: readline
-Version: 8.0
+Version: 8.1
 Release: 1
 License: GPLv3+
 URL: https://tiswww.case.edu/php/chet/readline/rltop.html
