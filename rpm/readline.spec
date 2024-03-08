@@ -48,8 +48,12 @@ mv -f rl-fgets.c{_,}
 popd
 
 %build
-export CPPFLAGS="-I%{_includedir}/ncurses"
-%configure --enable-static=no
+%configure --enable-static=no \
+           --enable-shared			\
+           --enable-multibyte		\
+           --disable-bracketed-paste-default \
+           %{nil}
+
 %make_build
 
 %install
