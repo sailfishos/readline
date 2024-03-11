@@ -1,9 +1,14 @@
+%define rl_major 8
+%define rversion 8.2
+%define rpatchlvl 10
+
 #specfile originally created for Fedora, modified for Moblin Linux
 Summary: A library for editing typed command lines
 Name: readline
-Version: 8.1
+# Git Tag should match these 
+Version: %{rversion}.%{rpatchlvl}
 Release: 1
-License: GPLv3+
+License: GPL-3.0-or-later
 URL: https://tiswww.case.edu/php/chet/readline/rltop.html
 Source: %{name}-%{version}.tar.xz
 Patch1: readline-5.2-shlib.patch
@@ -18,10 +23,25 @@ of previously-entered command lines for recalling or editing those
 lines, and for performing csh-like history expansion on previous
 commands.
 
+
+%package -n libreadline%{rl_major}
+Summary:        The Readline Library
+Group:          System/Libraries
+Suggests:       readline-doc = %{version}
+Provides:       libreadline%{rl_major} = %{rversion}
+Provides:       readline = %{rversion}
+Obsoletes:      readline <= 8.1
+
+%description -n libreadline%{rl_major}
+The readline library is used by the Bourne Again Shell (bash, the
+standard command interpreter) for easy editing of command lines.  This
+includes history and search functionality.
+
 %package devel
 Summary: Files needed to develop programs which use the readline library
-Requires: %{name} = %{version}-%{release}
+Requires: libreadline%{rl_major} >= %{rversion}
 Requires: ncurses-devel
+Recommends: readline-doc = %{version}
 
 %description devel
 The Readline library provides a set of functions that allow users to
@@ -40,16 +60,13 @@ Examples, man and info pages for %{name}.
 %prep
 %autosetup -p1 -n %{name}-%{version}/upstream
 
-pushd examples
-rm -f rlfe/configure
-iconv -f iso8859-1 -t utf8 -o rl-fgets.c{_,}
-touch -r rl-fgets.c{,_}
-mv -f rl-fgets.c{_,}
-popd
-
 %build
-export CPPFLAGS="-I%{_includedir}/ncurses"
-%configure --enable-static=no
+%configure --enable-static=no \
+           --enable-shared			\
+           --enable-multibyte		\
+           --disable-bracketed-paste-default \
+           %{nil}
+
 %make_build
 
 %install
@@ -66,20 +83,18 @@ install -m0644 -t %{buildroot}/%{_docdir}/%{name}-%{version} \
 
 %postun -p /sbin/ldconfig
 
-%files
-%defattr(-,root,root,-)
+%files -n libreadline%{rl_major}
 %license COPYING
 %{_libdir}/libreadline*.so.*
 %{_libdir}/libhistory*.so.*
 
 %files devel
-%defattr(-,root,root,-)
 %{_includedir}/readline/*.h
 %{_libdir}/lib*.so
 %{_libdir}/pkgconfig/%{name}.pc
+%{_libdir}/pkgconfig/history.pc
 
 %files doc
-%defattr(-,root,root,-)
 %{_infodir}/*.*
 %{_mandir}/man3/%{name}.*
 %{_mandir}/man3/history.*
