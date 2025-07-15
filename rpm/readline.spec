@@ -1,12 +1,12 @@
 #specfile originally created for Fedora, modified for Moblin Linux
 Summary: A library for editing typed command lines
 Name: readline
-Version: 8.1
+Version: 8.3
 Release: 1
 License: GPLv3+
-URL: https://tiswww.case.edu/php/chet/readline/rltop.html
+URL: https://github.com/sailfishos/readline
 Source: %{name}-%{version}.tar.xz
-Patch1: readline-5.2-shlib.patch
+Patch1: readline-8.0-shlib.patch
 
 BuildRequires: ncurses-devel
 
@@ -67,19 +67,17 @@ install -m0644 -t %{buildroot}/%{_docdir}/%{name}-%{version} \
 %postun -p /sbin/ldconfig
 
 %files
-%defattr(-,root,root,-)
 %license COPYING
 %{_libdir}/libreadline*.so.*
 %{_libdir}/libhistory*.so.*
 
 %files devel
-%defattr(-,root,root,-)
 %{_includedir}/readline/*.h
 %{_libdir}/lib*.so
 %{_libdir}/pkgconfig/%{name}.pc
+%{_libdir}/pkgconfig/history.pc
 
 %files doc
-%defattr(-,root,root,-)
 %{_infodir}/*.*
 %{_mandir}/man3/%{name}.*
 %{_mandir}/man3/history.*
